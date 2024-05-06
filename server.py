@@ -19,15 +19,16 @@ def bytes_to_array(b: bytes) -> np.ndarray:
 
 while True:
     dat=b""
-    dat=conn.recv(2916922) #cambiar pos resolucion
+    dat=conn.recv(1440000) #cambiar pos resolucion
     #try:Aa
-    dat=struct.unpack('s',dat)
-    mscreen = bytes_to_array(dat)
+    
+    mscreen = np.frombuffer(dat,dtype=np.uint8)
+    mscreen=mscreen.reshape(600,800,3)
     mscreen = cv2.cvtColor(mscreen, cv2.COLOR_BGR2RGB)
     #except:pass
     #mscreen=Image.fromarray(dat)
     cv2.imshow("capturado pantalla",mscreen)
-
+    conn.send(b'o')
     if cv2.waitKey(1) & 0xFF == ord('s'):
         break
 
