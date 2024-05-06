@@ -4,7 +4,8 @@ import cv2
 import numpy as np
 import struct
 
-ipHost = "169.254.12.171"
+#ipHost = "169.254.12.171"
+ipHost = "127.0.0.1"
 portHost = 1234
 sock = socket.socket()
 
@@ -19,14 +20,10 @@ def bytes_to_array(b: bytes) -> np.ndarray:
 
 while True:
     dat=b""
-    dat=conn.recv(1440000) #cambiar pos resolucion
-    #try:Aa
-    
+    dat=conn.recv(1922400) #resolution x*y*3
     mscreen = np.frombuffer(dat,dtype=np.uint8)
-    mscreen=mscreen.reshape(600,800,3)
+    mscreen=mscreen.reshape(600,1068,3)
     mscreen = cv2.cvtColor(mscreen, cv2.COLOR_BGR2RGB)
-    #except:pass
-    #mscreen=Image.fromarray(dat)
     cv2.imshow("capturado pantalla",mscreen)
     conn.send(b'o')
     if cv2.waitKey(1) & 0xFF == ord('s'):
